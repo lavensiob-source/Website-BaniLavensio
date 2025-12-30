@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bani_Lavensio - Website Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fredoka+One&family=Playfair+Display:italic,wght@400;700&display=swap');
+        
+        :root {
+            --friv-purple: #9c27b0;
+            --friv-green: #00e676;
+            --friv-yellow: #ffeb3b;
+            --tiktok-cyan: #25F4EE;
+            --tiktok-pink: #FE2C55;
+            --fb-blue: #1877F2;
+            --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            --yt-red: #FF0000;
+            --google-blue: #4285F4;
+            --threads-black: #000000;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top center, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .profile-ring {
+            position: relative;
+            padding: 4px;
+            background: linear-gradient(45deg, var(--friv-purple), var(--friv-green), var(--friv-yellow), #ff1744);
+            border-radius: 50%;
+            animation: rotate-gradient 4s linear infinite;
+        }
+
+        @keyframes rotate-gradient {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-link.active {
+            background: rgba(0, 230, 118, 0.1);
+            border-left-color: var(--friv-green);
+            color: var(--friv-green);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group-custom {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-group-custom:focus-within {
+            border-color: var(--friv-green);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .fullscreen-active {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            background: #0f172a !important;
+        }
+
+        .sidebar-hidden #sidebar-left, 
+        .sidebar-hidden #sidebar-right {
+            display: none;
+        }
+        .sidebar-hidden #main-content {
+            grid-column: span 12 / span 12;
+        }
+
+        .scroll-btn {
+            position: fixed;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 230, 118, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            color: #00e676;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .scroll-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #scroll-up { bottom: 75px; }
+        #scroll-down { bottom: 20px; }
+
+        .fullscreen-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 50;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+
+        #menu-toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #00e676;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .font-elegant {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        /* Message Bubbles */
+        .msg { padding: 12px 16px; border-radius: 18px; max-width: 85%; font-size: 14px; line-height: 1.5; }
+        .msg-user { align-self: flex-end; background: var(--friv-green); color: #0f172a; font-weight: 600; border-bottom-right-radius: 4px; }
+        .msg-ai { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
+
+        /* BG Remover Grid */
+        .bg-grid {
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        /* Ping Meter */
+        .ping-meter {
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        .ping-bar {
+            flex: 1;
+            background: rgba(0, 230, 118, 0.2);
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease;
+            min-height: 5px;
+        }
+    </style>
+</head>
+<body class="py-8 px-4 md:px-12">
+
+    <button id="menu-toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i> <span>TUTUP MENU</span>
+    </button>
+
+    <button id="scroll-up" onclick="scrollToTop()" class="scroll-btn">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    <button id="scroll-down" onclick="scrollToBottom()" class="scroll-btn visible">
+        <i class="fas fa-chevron-down"></i>
+    </button>
+
+    <div id="layout-wrapper" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 mt-16">
+        
+        <!-- SIDEBAR KIRI -->
+        <aside id="sidebar-left" class="lg:col-span-3 flex flex-col gap-6">
+            <div class="glass-card rounded-[2rem] p-6 text-center">
+                <div class="profile-ring w-24 h-24 mx-auto mb-4">
+                    <div class="bg-slate-900 rounded-full p-1 w-full h-full">
+                        <img src="https://ui-avatars.com/api/?name=Bani+Lavensio&background=6a1b9a&color=fff" alt="Bani" class="w-full h-full rounded-full object-cover">
+                    </div>
+                </div>
+                <h2 class="text-xl font-black italic">Bani_Lavensio</h2>
+                <div class="mt-4 px-2 text-[13px] text-green-400 font-elegant leading-relaxed">
+                    Selamat datang di website kami portal serbaguna
+                </div>
+            </div>
+
+            <nav class="glass-card rounded-[2rem] overflow-hidden p-2">
+                <div onclick="switchTab('home')" id="nav-home" class="nav-link active flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fas fa-home w-5 text-center"></i>
+                    <span class="font-bold text-sm">Dashboard</span>
+                </div>
+                <div onclick="switchTab('ping')" id="nav-ping" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fas fa-network-wired w-5 text-center text-yellow-400"></i>
+                    <span class="font-bold text-sm">Test Ping</span>
+                </div>
+                <div onclick="switchTab('bg-remove')" id="nav-bg-remove" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fas fa-magic w-5 text-center text-purple-400"></i>
+                    <span class="font-bold text-sm">Hapus BG</span>
+                </div>
+                <div onclick="switchTab('search')" id="nav-search" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fas fa-search w-5 text-center text-blue-400"></i>
+                    <span class="font-bold text-sm">Bani Search</span>
+                </div>
+                <div onclick="switchTab('facebook')" id="nav-facebook" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fab fa-facebook w-5 text-center text-blue-500"></i>
+                    <span class="font-bold text-sm">FB Saver</span>
+                </div>
+                <div onclick="switchTab('instagram')" id="nav-instagram" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fab fa-instagram w-5 text-center text-pink-500"></i>
+                    <span class="font-bold text-sm">InstaSaver</span>
+                </div>
+                <div onclick="switchTab('media')" id="nav-media" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fab fa-youtube w-5 text-center text-red-500"></i>
+                    <span class="font-bold text-sm">YT Downloader</span>
+                </div>
+                <div onclick="switchTab('tiktok')" id="nav-tiktok" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fab fa-tiktok w-5 text-center text-cyan-400"></i>
+                    <span class="font-bold text-sm">TikTok Saver</span>
+                </div>
+                <div onclick="switchTab('ai')" id="nav-ai" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fas fa-robot w-5 text-center text-green-400"></i>
+                    <span class="font-bold text-sm">Bani AI</span>
+                </div>
+                <div onclick="switchTab('games')" id="nav-games" class="nav-link flex items-center gap-4 p-4 rounded-xl hover:bg-white/5">
+                    <i class="fas fa-gamepad w-5 text-center text-yellow-400"></i>
+                    <span class="font-bold text-sm">Arcade</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main id="main-content" class="lg:col-span-6 flex flex-col gap-6">
+            
+            <!-- Home -->
+            <div id="tab-home" class="tab-content active">
+                <div class="glass-card rounded-[2.5rem] p-8 md:p-12 min-h-[500px] flex flex-col justify-center text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-home')"><i class="fas fa-expand"></i></button>
+                    <h1 class="text-4xl font-black leading-tight text-white mb-6 uppercase">
+                        Pusat Kendali <span class="text-green-400">Bani</span>
+                    </h1>
+                    <p class="text-slate-400 text-sm mb-10 max-w-sm mx-auto">Portal serbaguna untuk pengunduhan media, pencarian cerdas, asisten AI, dan alat utilitas.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <button onclick="switchTab('ping')" class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-yellow-500/10">
+                            <i class="fas fa-network-wired text-yellow-400 mb-2 block text-xl"></i>
+                            <h4 class="font-bold text-[10px] uppercase">Test Ping</h4>
+                        </button>
+                        <button onclick="switchTab('bg-remove')" class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-purple-500/10">
+                            <i class="fas fa-magic text-purple-400 mb-2 block text-xl"></i>
+                            <h4 class="font-bold text-[10px] uppercase">Hapus BG</h4>
+                        </button>
+                        <button onclick="switchTab('facebook')" class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-blue-500/10">
+                            <i class="fab fa-facebook text-blue-500 mb-2 block text-xl"></i>
+                            <h4 class="font-bold text-[10px] uppercase">Facebook</h4>
+                        </button>
+                        <button onclick="switchTab('instagram')" class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-pink-500/10">
+                            <i class="fab fa-instagram text-pink-500 mb-2 block text-xl"></i>
+                            <h4 class="font-bold text-[10px] uppercase">Instagram</h4>
+                        </button>
+                        <button onclick="switchTab('search')" class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-blue-500/10">
+                            <i class="fas fa-search text-blue-500 mb-2 block text-xl"></i>
+                            <h4 class="font-bold text-[10px] uppercase">Search</h4>
+                        </button>
+                        <button onclick="switchTab('ai')" class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-purple-500/10">
+                            <i class="fas fa-brain text-purple-400 mb-2 block text-xl"></i>
+                            <h4 class="font-bold text-[10px] uppercase">Bani AI</h4>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ping Tester Tool -->
+            <div id="tab-ping" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[500px] flex flex-col gap-6 text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-ping')"><i class="fas fa-expand"></i></button>
+                    <i class="fas fa-network-wired text-5xl mb-2 text-yellow-400"></i>
+                    <h2 class="text-2xl font-black uppercase italic">SIGNAL PING TESTER</h2>
+                    <p class="text-xs text-slate-400 -mt-4 mb-4">Cek kualitas koneksi internet Anda</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-6 bg-white/5 rounded-3xl border border-white/10">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase mb-1">Status</p>
+                            <h3 id="ping-status" class="text-xl font-black text-white">IDLE</h3>
+                        </div>
+                        <div class="p-6 bg-white/5 rounded-3xl border border-white/10">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase mb-1">Ping</p>
+                            <h3 id="ping-value" class="text-xl font-black text-yellow-400">-- ms</h3>
+                        </div>
+                    </div>
+
+                    <div class="ping-meter p-4 bg-black/20 rounded-3xl overflow-hidden border border-white/5" id="ping-graph">
+                        <!-- Bars will be added here via JS -->
+                    </div>
+
+                    <div class="flex gap-3 justify-center">
+                        <button id="btn-start-ping" onclick="togglePingTest()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-900 px-8 py-3 rounded-xl font-black text-xs transition-all flex items-center gap-2">
+                            <i class="fas fa-play"></i> MULAI TEST
+                        </button>
+                    </div>
+
+                    <div class="text-left bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <h4 class="text-[10px] font-bold text-yellow-400 uppercase mb-2">Informasi Jaringan</h4>
+                        <div class="grid grid-cols-2 gap-y-2 text-[11px]">
+                            <span class="text-slate-500">Tipe Koneksi:</span>
+                            <span id="net-type" class="text-white font-bold">Checking...</span>
+                            <span class="text-slate-500">Bandwidth:</span>
+                            <span id="net-down" class="text-white font-bold">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BG Remover Tool -->
+            <div id="tab-bg-remove" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[500px] flex flex-col gap-6 text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-bg-remove')"><i class="fas fa-expand"></i></button>
+                    <i class="fas fa-magic text-5xl mb-2 text-purple-400"></i>
+                    <h2 class="text-2xl font-black uppercase italic">BG REMOVER AI</h2>
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10 border-dashed hover:border-purple-400/50 transition-all cursor-pointer relative" onclick="document.getElementById('bg-file').click()">
+                        <input type="file" id="bg-file" accept="image/*" class="hidden" onchange="previewImage(this)">
+                        <div id="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt text-3xl mb-3 text-slate-500"></i>
+                            <p class="font-bold text-sm">Klik untuk upload foto</p>
+                        </div>
+                    </div>
+                    <div id="bg-processing" class="hidden py-8">
+                        <div class="w-12 h-12 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
+                        <p class="text-sm font-bold animate-pulse text-purple-400">Menganalisis Subjek...</p>
+                    </div>
+                    <div id="bg-result-container" class="hidden flex flex-col gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><img id="img-orig" class="w-full h-48 object-contain rounded-xl bg-black/20"></div>
+                            <div class="bg-grid rounded-xl h-48 flex items-center justify-center overflow-hidden border border-white/5"><img id="img-no-bg" class="max-h-full"></div>
+                        </div>
+                        <div class="flex gap-3 justify-center">
+                            <button onclick="downloadImage()" class="bg-purple-600 hover:bg-purple-500 text-white px-8 py-3 rounded-xl font-black text-xs transition-all flex items-center gap-2"><i class="fas fa-download"></i> DOWNLOAD PNG</button>
+                            <button onclick="resetBGTool()" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-black text-xs">COBA LAGI</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FB Saver -->
+            <div id="tab-facebook" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[500px] flex flex-col gap-6 text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-facebook')"><i class="fas fa-expand"></i></button>
+                    <i class="fab fa-facebook text-5xl mb-2 text-blue-500"></i>
+                    <h2 class="text-2xl font-black uppercase italic">FBSaver</h2>
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10">
+                        <div class="input-group-custom flex items-center p-2 rounded-2xl mb-4">
+                            <input type="text" id="fb-url" placeholder="Link Facebook Video/Reel..." class="bg-transparent border-none flex-1 px-4 py-3 text-sm focus:outline-none text-white">
+                            <button onclick="processFacebook()" class="bg-blue-600 px-6 py-2 rounded-xl font-black text-[10px]">UNDUH</button>
+                        </div>
+                        <div id="fb-result" class="hidden mt-4">
+                            <iframe id="fb-frame" class="w-full h-32 rounded-xl border-none"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- InstaSaver -->
+            <div id="tab-instagram" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[500px] flex flex-col gap-6 text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-instagram')"><i class="fas fa-expand"></i></button>
+                    <i class="fab fa-instagram text-5xl mb-2 text-pink-500"></i>
+                    <h2 class="text-2xl font-black uppercase italic">InstaSaver</h2>
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10">
+                        <div class="input-group-custom flex items-center p-2 rounded-2xl mb-4">
+                            <input type="text" id="ig-url" placeholder="Link Instagram..." class="bg-transparent border-none flex-1 px-4 py-3 text-sm focus:outline-none text-white">
+                            <button onclick="processInstagram()" class="bg-pink-600 px-6 py-2 rounded-xl font-black text-[10px]">UNDUH</button>
+                        </div>
+                        <div id="ig-result" class="hidden mt-4">
+                            <iframe id="ig-frame" class="w-full h-32 rounded-xl border-none"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bani Search -->
+            <div id="tab-search" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[600px] flex flex-col gap-6 relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-search')"><i class="fas fa-expand"></i></button>
+                    <div class="text-center font-black text-3xl italic uppercase mb-4">
+                        <span class="text-blue-500">B</span><span class="text-red-500">a</span><span class="text-yellow-500">n</span><span class="text-green-500">i</span> SEARCH
+                    </div>
+                    <div class="input-group-custom flex items-center p-2 rounded-2xl">
+                        <input type="text" id="search-input" placeholder="Cari informasi apa saja..." class="bg-transparent border-none flex-1 px-4 py-3 text-sm focus:outline-none text-white">
+                        <button onclick="performSearch()" class="bg-blue-600 px-6 py-2 rounded-xl font-black text-[10px]">CARI</button>
+                    </div>
+                    <div id="search-results" class="space-y-4 overflow-y-auto max-h-[400px]"></div>
+                </div>
+            </div>
+
+            <!-- YT Downloader -->
+            <div id="tab-media" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[500px] flex flex-col gap-6 text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-media')"><i class="fas fa-expand"></i></button>
+                    <i class="fab fa-youtube text-red-600 text-5xl mb-2"></i>
+                    <h2 class="text-2xl font-black uppercase italic">YT Downloader</h2>
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10">
+                        <div class="input-group-custom flex items-center p-2 rounded-2xl">
+                            <input type="text" id="yt-url" placeholder="Link YouTube..." class="bg-transparent border-none flex-1 px-4 py-3 text-sm focus:outline-none text-white">
+                            <button onclick="processYouTube()" class="bg-red-600 px-6 py-2 rounded-xl font-black text-[10px]">PROSES</button>
+                        </div>
+                        <div id="yt-result" class="hidden mt-6 space-y-4">
+                            <iframe id="yt-frame-mp3" class="w-full h-16 rounded-xl border-none"></iframe>
+                            <iframe id="yt-frame-mp4" class="w-full h-16 rounded-xl border-none"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TikTok Saver -->
+            <div id="tab-tiktok" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] p-8 min-h-[500px] flex flex-col gap-6 text-center relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-tiktok')"><i class="fas fa-expand"></i></button>
+                    <i class="fab fa-tiktok text-cyan-400 text-5xl mb-2"></i>
+                    <h2 class="text-2xl font-black uppercase italic">TikTok Saver</h2>
+                    <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10">
+                        <div class="input-group-custom flex items-center p-2 rounded-2xl">
+                            <input type="text" id="tt-url" placeholder="Link TikTok..." class="bg-transparent border-none flex-1 px-4 py-3 text-sm focus:outline-none text-white">
+                            <button onclick="processTikTok()" class="bg-cyan-500 text-slate-900 px-6 py-2 rounded-xl font-black text-[10px]">PROSES</button>
+                        </div>
+                        <div id="tt-result" class="hidden mt-6">
+                            <iframe id="tt-frame" class="w-full h-32 rounded-xl border-none"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bani AI -->
+            <div id="tab-ai" class="tab-content">
+                <div class="glass-card rounded-[2.5rem] flex flex-col h-[600px] overflow-hidden relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-ai')"><i class="fas fa-expand"></i></button>
+                    <div class="p-6 bg-white/5 border-b border-white/5 flex items-center justify-between">
+                        <h3 class="font-black text-sm uppercase tracking-tight text-green-400">Bani AI Assistant</h3>
+                    </div>
+                    <div id="chat-box" class="chat-container p-6 flex-1">
+                        <div class="msg msg-ai">Halo! Saya Bani AI. Ada yang bisa saya bantu hari ini?</div>
+                    </div>
+                    <div class="p-4 bg-slate-900/50">
+                        <div class="flex gap-2">
+                            <input type="text" id="ai-input" placeholder="Tanyakan sesuatu..." class="flex-1 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-sm focus:outline-none" onkeypress="if(event.key === 'Enter') askAI()">
+                            <button onclick="askAI()" class="bg-green-500 text-slate-900 w-12 h-12 rounded-2xl flex items-center justify-center"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arcade -->
+            <div id="tab-games" class="tab-content">
+                <div class="game-viewport aspect-video relative">
+                    <button class="fullscreen-btn" onclick="toggleFullscreen('tab-games')"><i class="fas fa-expand"></i></button>
+                    <iframe id="game-frame" src="https://www.gamepix.com/" class="w-full h-full" frameborder="0"></iframe>
+                </div>
+            </div>
+        </main>
+
+        <!-- SIDEBAR KANAN -->
+        <aside id="sidebar-right" class="lg:col-span-3">
+            <div class="glass-card rounded-[2rem] p-6 sticky top-8">
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Hubungi Kami</h3>
+                <div class="flex flex-col gap-3">
+                    <a href="https://instagram.com/bani_lavensio" target="_blank" class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-pink-500/10 transition-all border border-transparent hover:border-pink-500/20 group">
+                        <i class="fab fa-instagram text-pink-500 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">@bani_lavensio</span>
+                    </a>
+                    <a href="https://facebook.com/100078059482221" target="_blank" class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-blue-600/10 transition-all border border-transparent hover:border-blue-600/20 group">
+                        <i class="fab fa-facebook text-blue-600 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Facebook Page</span>
+                    </a>
+                    <a href="https://threads.net/@bani_lavensio" target="_blank" class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all border border-transparent hover:border-white/20 group">
+                        <i class="fab fa-threads text-white text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Threads</span>
+                    </a>
+                    <a href="https://t.me/Lavensio105" target="_blank" class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-blue-500/10 transition-all border border-transparent hover:border-blue-500/20 group">
+                        <i class="fab fa-telegram-plane text-blue-400 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Telegram Chat</span>
+                    </a>
+                    <a href="mailto:lavensiob@gmail.com" class="flex items-center gap-3 p-4 rounded-2xl bg-white/5 hover:bg-yellow-500/10 transition-all border border-transparent hover:border-yellow-500/20 group">
+                        <i class="fas fa-envelope text-yellow-500 text-xl group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Email Kami</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const apiKey = ""; 
+
+        // Sidebar Control
+        function toggleSidebar() {
+            const body = document.body;
+            const btn = document.getElementById('menu-toggle-btn');
+            body.classList.toggle('sidebar-hidden');
+            const isHidden = body.classList.contains('sidebar-hidden');
+            btn.innerHTML = isHidden ? '<i class="fas fa-eye"></i> <span>BUKA MENU</span>' : '<i class="fas fa-bars"></i> <span>TUTUP MENU</span>';
+        }
+
+        // Fullscreen Control
+        function toggleFullscreen(tabId) {
+            const el = document.getElementById(tabId);
+            el.classList.toggle('fullscreen-active');
+            const icon = el.querySelector('.fullscreen-btn i');
+            icon.classList.toggle('fa-expand');
+            icon.classList.toggle('fa-compress');
+        }
+
+        // Tab Switcher
+        function switchTab(name) {
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+                c.classList.remove('fullscreen-active');
+            });
+            
+            const nav = document.getElementById('nav-' + name);
+            const tab = document.getElementById('tab-' + name);
+            if (nav) nav.classList.add('active');
+            if (tab) tab.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Ping Tester Logic
+        let pingInterval;
+        let isPingTesting = false;
+        const pingHistory = [];
+
+        function togglePingTest() {
+            const btn = document.getElementById('btn-start-ping');
+            const status = document.getElementById('ping-status');
+            const graph = document.getElementById('ping-graph');
+            
+            if (isPingTesting) {
+                clearInterval(pingInterval);
+                isPingTesting = false;
+                btn.innerHTML = '<i class="fas fa-play"></i> MULAI TEST';
+                status.innerText = 'PAUSED';
+            } else {
+                isPingTesting = true;
+                btn.innerHTML = '<i class="fas fa-stop"></i> BERHENTI';
+                status.innerText = 'RUNNING';
+                graph.innerHTML = '';
+                pingHistory.length = 0;
+                
+                // Update network info
+                if (navigator.connection) {
+                    document.getElementById('net-type').innerText = navigator.connection.effectiveType || 'N/A';
+                    document.getElementById('net-down').innerText = navigator.connection.downlink + ' Mbps' || 'N/A';
+                }
+
+                pingInterval = setInterval(async () => {
+                    const startTime = Date.now();
+                    try {
+                        // Using a small asset for ping test
+                        await fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-cache' });
+                        const duration = Date.now() - startTime;
+                        updatePingDisplay(duration);
+                    } catch (e) {
+                        updatePingDisplay(null);
+                    }
+                }, 1000);
+            }
+        }
+
+        function updatePingDisplay(ms) {
+            const valEl = document.getElementById('ping-value');
+            const graph = document.getElementById('ping-graph');
+            
+            if (ms === null) {
+                valEl.innerText = "Error";
+                valEl.className = "text-xl font-black text-red-500";
+                return;
+            }
+
+            valEl.innerText = ms + " ms";
+            if (ms < 50) valEl.className = "text-xl font-black text-green-400";
+            else if (ms < 150) valEl.className = "text-xl font-black text-yellow-400";
+            else valEl.className = "text-xl font-black text-red-500";
+
+            // Add bar to graph
+            const bar = document.createElement('div');
+            bar.className = 'ping-bar';
+            const height = Math.min(ms / 5, 100); 
+            bar.style.height = height + '%';
+            if (ms < 50) bar.style.background = '#00e676';
+            else if (ms < 150) bar.style.background = '#ffeb3b';
+            else bar.style.background = '#ff1744';
+
+            graph.appendChild(bar);
+            if (graph.children.length > 30) {
+                graph.removeChild(graph.firstChild);
+            }
+        }
+
+        // BG Remover Logic
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('upload-placeholder').classList.add('hidden');
+                    document.getElementById('bg-processing').classList.remove('hidden');
+                    document.getElementById('img-orig').src = e.target.result;
+                    processBGRemove(e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function processBGRemove(base64Data) {
+            const pureBase64 = base64Data.split(',')[1];
+            const callApi = async (retryCount = 0) => {
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [
+                                    { text: "Remove the background from this image and return only the subject as a PNG image with transparency." },
+                                    { inlineData: { mimeType: "image/png", data: pureBase64 } }
+                                ]
+                            }],
+                            generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
+                        })
+                    });
+                    if (!res.ok && retryCount < 5) throw new Error();
+                    return await res.json();
+                } catch (e) {
+                    if (retryCount < 5) {
+                        await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
+                        return callApi(retryCount + 1);
+                    }
+                    throw e;
+                }
+            };
+
+            try {
+                const result = await callApi();
+                const processedBase64 = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+                if (processedBase64) {
+                    document.getElementById('img-no-bg').src = `data:image/png;base64,${processedBase64}`;
+                    document.getElementById('bg-processing').classList.add('hidden');
+                    document.getElementById('bg-result-container').classList.remove('hidden');
+                }
+            } catch (err) {
+                alert("Gagal memproses gambar.");
+                resetBGTool();
+            }
+        }
+
+        function downloadImage() {
+            const img = document.getElementById('img-no-bg');
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = 'bani-lavensio-no-bg.png';
+            link.click();
+        }
+
+        function resetBGTool() {
+            document.getElementById('upload-placeholder').classList.remove('hidden');
+            document.getElementById('bg-processing').classList.add('hidden');
+            document.getElementById('bg-result-container').classList.add('hidden');
+        }
+
+        // Other scripts (Search, AI, Media) same as before...
+        async function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if(!query) return;
+            const resultsDiv = document.getElementById('search-results');
+            resultsDiv.innerHTML = '<div class="p-8 text-center animate-pulse">Mencari hasil terbaik...</div>';
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Berikan ringkasan pencarian untuk: ${query} dalam Bahasa Indonesia.` }] }],
+                        tools: [{ google_search: {} }]
+                    })
+                });
+                const data = await res.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, tidak ada hasil.";
+                resultsDiv.innerHTML = `<div class="p-5 bg-white/5 rounded-2xl border border-white/10 text-sm">${text}</div>`;
+            } catch (err) { resultsDiv.innerHTML = 'Gagal memuat hasil.'; }
+        }
+
+        async function askAI() {
+            const input = document.getElementById('ai-input');
+            const chatBox = document.getElementById('chat-box');
+            const userText = input.value.trim();
+            if(!userText) return;
+            input.value = "";
+            chatBox.innerHTML += `<div class="msg msg-user">${userText}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: userText }] }] })
+                });
+                const data = await res.json();
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, saya tidak mengerti.";
+                chatBox.innerHTML += `<div class="msg msg-ai">${reply}</div>`;
+            } catch (err) { chatBox.innerHTML += `<div class="msg msg-ai text-red-400">Error.</div>`; }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        const extractYTId = (url) => {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        };
+
+        function processFacebook() {
+            const url = document.getElementById('fb-url').value.trim();
+            if(!url) return;
+            document.getElementById('fb-result').classList.remove('hidden');
+            document.getElementById('fb-frame').src = `https://fdownloader.net/api/download?url=${encodeURIComponent(url)}`;
+        }
+
+        function processInstagram() {
+            const url = document.getElementById('ig-url').value.trim();
+            if(!url) return;
+            document.getElementById('ig-result').classList.remove('hidden');
+            document.getElementById('ig-frame').src = `https://indown.io/api-download?url=${encodeURIComponent(url)}`;
+        }
+
+        function processYouTube() {
+            const url = document.getElementById('yt-url').value.trim();
+            const id = extractYTId(url);
+            if(!id) return alert("Link tidak valid");
+            document.getElementById('yt-result').classList.remove('hidden');
+            document.getElementById('yt-frame-mp3').src = `https://button.y2mate.is/button.php?v=${id}&color=ef4444&type=mp3`;
+            document.getElementById('yt-frame-mp4').src = `https://button.y2mate.is/button.php?v=${id}&color=3b82f6&type=video`;
+        }
+
+        function processTikTok() {
+            const url = document.getElementById('tt-url').value.trim();
+            if(!url) return;
+            document.getElementById('tt-result').classList.remove('hidden');
+            document.getElementById('tt-frame').src = `https://musicaldown.com/api/download?url=${encodeURIComponent(url)}`;
+        }
+
+        // Scroll
+        const btnUp = document.getElementById('scroll-up');
+        const btnDown = document.getElementById('scroll-down');
+        window.onscroll = () => {
+            btnUp.classList.toggle('visible', window.scrollY > 200);
+            btnDown.classList.toggle('visible', (window.innerHeight + window.scrollY) < document.documentElement.scrollHeight - 100);
+        };
+        const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        const scrollToBottom = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    </script>
+</body>
+</html>
